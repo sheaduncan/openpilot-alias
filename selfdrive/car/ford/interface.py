@@ -56,9 +56,8 @@ class CarInterface(CarInterfaceBase):
     elif candidate == CAR.F_150_MK14:
       # required trim only on SuperCrew
       # Lariat 4dr SuperCrew 4WD 6.5 ft. SB (5.0L 8cyl 10A)
-      # Max Tow Package has 20:1 steering ratio, otherwise 17:1
       ret.wheelbase = 3.99288
-      ret.steerRatio = 20.0
+      ret.steerRatio = 17.0
       ret.mass = 2275 + STD_CARGO_KG
 
     elif candidate == CAR.FOCUS_MK4:
