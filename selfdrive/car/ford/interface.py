@@ -22,7 +22,7 @@ class CarInterface(CarInterfaceBase):
     ret.dashcamOnly = candidate in {CAR.FOCUS_MK4}
 
     ret.steerControlType = car.CarParams.SteerControlType.angle
-    ret.steerActuatorDelay = 0.2
+    ret.steerActuatorDelay = 0.3
     ret.steerLimitTimer = 1.0
 
     safety_param = 0
