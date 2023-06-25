@@ -59,6 +59,7 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 3.99288
       ret.steerRatio = 17.0
       ret.mass = 2275 + STD_CARGO_KG
+      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
 
     elif candidate == CAR.FOCUS_MK4:
       ret.wheelbase = 2.7
