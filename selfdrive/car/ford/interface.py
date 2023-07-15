@@ -14,7 +14,7 @@ class CarInterface(CarInterfaceBase):
   @staticmethod
   def _get_params(ret, candidate, fingerprint, car_fw, experimental_long, docs):
     ret.carName = "ford"
-    ret.radarUnavailable = False
+    ret.radarUnavailable = True
 
     # These cars are dashcam only for lack of test coverage.
     # Once a user confirms each car works and a test route is
