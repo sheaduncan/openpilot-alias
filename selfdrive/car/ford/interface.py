@@ -62,9 +62,9 @@ class CarInterface(CarInterfaceBase):
 
       #Longitudinal Tune
       ret.longitudinalTuning.kpBP = [5., 35.]
-      #ret.longitudinalTuning.kiBP = [0.]
+      ret.longitudinalTuning.kiBP = [0.]
       ret.longitudinalTuning.kpV = [2.0, 1.5]
-      #ret.longitudinalTuning.kiV = [0.72]
+      ret.longitudinalTuning.kiV = [0.72]
       #ret.stoppingDecelRate = 2.0  # reach brake quickly after enabling
       #ret.vEgoStopping = 0.25
       #ret.vEgoStarting = 0.25
