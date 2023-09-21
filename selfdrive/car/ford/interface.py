@@ -55,7 +55,7 @@ class CarInterface(CarInterfaceBase):
       # Lariat 4dr SuperCrew 4WD 6.5 ft. SB (5.0L 8cyl 10A)
       ret.wheelbase = 3.99288
       ret.steerRatio = 19.8
-      ret.mass = 2275 + STD_CARGO_KG
+      ret.mass = 2275
 
       ret.steerActuatorDelay = 0.28
       
