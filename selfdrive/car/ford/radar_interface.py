@@ -9,7 +9,7 @@ from openpilot.selfdrive.car.interfaces import RadarInterfaceBase
 DELPHI_ESR_RADAR_MSGS = list(range(0x500, 0x540))
 
 DELPHI_MRR_RADAR_START_ADDR = 0x120
-DELPHI_MRR_RADAR_MSG_COUNT = 64
+DELPHI_MRR_RADAR_MSG_COUNT = 22
 
 
 def _create_delphi_esr_radar_can_parser(CP) -> CANParser:
