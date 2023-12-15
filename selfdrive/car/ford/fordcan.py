@@ -129,7 +129,7 @@ def create_acc_msg(packer, CAN: CanBus, long_active: bool, gas: float, accel: fl
   """
 
   precharge = gas < CarControllerParams.MIN_GAS and long_active
-  actuateBrakes = gas < -2 and long_active
+  actuateBrakes = gas < -0.8 and long_active
   values = {
     "AccBrkTot_A_Rq": accel,                          # Brake total accel request: [-20|11.9449] m/s^2
     "Cmbb_B_Enbl": 1 if long_active else 0,           # Enabled: 0=No, 1=Yes
