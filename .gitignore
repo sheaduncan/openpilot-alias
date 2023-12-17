@@ -83,3 +83,7 @@ build/
 !**/.gitkeep
 
 poetry.toml
+cereal
+cereal
+opendbc
+panda
