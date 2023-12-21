@@ -43,7 +43,8 @@ class CarController:
     self.main_on_last = False
     self.lkas_enabled_last = False
     self.steer_alert_last = False
-    self.actuate_last = 0
+    self.brake_actuate_last = 0
+    self.precharge_actuate_last = 0
 
     self.brake_actutator_target = -0.45
     self.brake_actutator_stdDevLow = 0.05
