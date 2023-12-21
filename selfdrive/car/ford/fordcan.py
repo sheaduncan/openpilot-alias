@@ -120,7 +120,7 @@ def create_lat_ctl2_msg(packer, CAN: CanBus, mode: int, path_offset: float, path
   return packer.make_can_msg("LateralMotionControl2", CAN.main, values)
 
 
-def create_acc_msg(packer, CAN: CanBus, long_active: bool, gas: float, accel: float, stopping: bool, actuate: bool, v_ego_kph: float):
+def create_acc_msg(packer, CAN: CanBus, long_active: bool, gas: float, accel: float, stopping: bool, brake_actuator: bool, precharge_actuator: bool, v_ego_kph: float):
   """
   Creates a CAN message for the Ford ACC Command.
 
@@ -131,9 +131,9 @@ def create_acc_msg(packer, CAN: CanBus, long_active: bool, gas: float, accel: fl
   """
 
   # precharge_actuator = accel < -0.25 and long_active
-  # brake_actuator = gas == -5 and long_active # and accel < -.75
-  decel = actuate and long_active
-  brake_actuator = precharge_actuator = decel
+  # brake_actuator = gas == -5 and long_active # and accel < -.75  
+  # decel = actuate and long_active
+  # brake_actuator = precharge_actuator = decel
   gas_pred = clip(accel, -5, 0) if gas == -5 else accel
   values = {
     "AccBrkTot_A_Rq": accel,                          # Brake total accel request: [-20|11.9449] m/s^2
@@ -142,6 +142,7 @@ def create_acc_msg(packer, CAN: CanBus, long_active: bool, gas: float, accel: fl
     "AccPrpl_A_Pred": gas_pred,                            # Acceleration request: [-5|5.23] m/s^2
     "AccVeh_V_Trg": v_ego_kph,                        # Target speed: [0|255] km/h
     "AccResumEnbl_B_Rq": 1 if long_active else 0,
+    "AccVeh_V_Trg": v_ego_kph,                        # Target speed: [0|255] km/h
     # TODO: we may be able to improve braking response by utilizing pre-charging better
     "AccBrkPrchg_B_Rq": 1 if precharge_actuator else 0,     # Pre-charge brake request: 0=No, 1=Yes
     "AccBrkDecel_B_Rq": 1 if brake_actuator else 0,     # Deceleration request: 0=Inactive, 1=Active
