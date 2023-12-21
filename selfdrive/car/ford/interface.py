@@ -68,7 +68,7 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.kpBP = [0.]
       ret.longitudinalTuning.kpV = [0.5]
       ret.longitudinalTuning.kiBP = [0.]
-      ret.longitudinalTuning.kiV = [0.]
+      ret.longitudinalTuning.kiV = [0.05]
       #ret.longitudinalTuning.deadzoneBP = [0., 9.]
       #ret.longitudinalTuning.deadzoneV = [.0, .2]
       # TODO estimate car specific lag, use .15s for now
