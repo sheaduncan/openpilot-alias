@@ -45,6 +45,19 @@ class CarController:
     self.steer_alert_last = False
     self.actuate_last = 0
 
+    self.brake_actutator_target = -0.45
+    self.brake_actutator_stdDevLow = 0.05
+    self.brake_actutator_stdDevHigh = 0.45
+    
+    self.precharge_actutator_target = -0.2
+    self.precharge_actutator_stdDevLow = 0.05
+    self.precharge_actutator_stdDevHigh = 0.2
+
+    self.gas_min = CarControllerParams.MIN_GAS
+    self.brake_min = CarControllerParams.MIN_GAS
+
+    self.brake_0_point = 0
+
   def update(self, CC, CS, now_nanos):
     can_sends = []
 
@@ -96,9 +109,20 @@ class CarController:
     if self.CP.openpilotLongitudinalControl and (self.frame % CarControllerParams.ACC_CONTROL_STEP) == 0:
       # Both gas and accel are in m/s^2, accel is used solely for braking
       accel = clip(actuators.accel, CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX)
+
+      brake_actuate = False
+      precharge_actuate = False
+
       gas = accel
       if not CC.longActive or gas < CarControllerParams.MIN_GAS:
         gas = CarControllerParams.INACTIVE_GAS
+
+      brake = accel
+      if brake < self.brake_min:
+        brake = interp(clip(brake, CarControllerParams.ACCEL_MIN, self.brake_min), [CarControllerParams.ACCEL_MIN, self.brake_min], [CarControllerParams.ACCEL_MIN, self.brake_0_point])    
+      
+        if CC.longActive:
+          brake_actuate = precharge_actuate = True
 
       stopping = CC.actuators.longControlState == LongCtrlState.stopping
 
@@ -107,10 +131,13 @@ class CarController:
       if not CC.longActive and hud_control.setSpeed:
         targetSpeed = hud_control.setSpeed
 
-      actuate = hysteresis(accel, self.actuate_last, -0.05, 0.05)
-      self.actuate_last = actuate
+      # brake_actuate = hysteresis(accel, self.brake_actuate_last, self.brake_actutator_target, self.brake_actutator_stdDevLow, self.brake_actutator_stdDevHigh)
+      # self.brake_actuate_last = brake_actuate
 
-      can_sends.append(fordcan.create_acc_msg(self.packer, self.CAN, CC.longActive, gas, accel, stopping, actuate, v_ego_kph=targetSpeed * CV.MS_TO_KPH))
+      # precharge_actuate = hysteresis(accel, self.precharge_actuate_last, self.precharge_actutator_target, self.precharge_actutator_stdDevLow, self.precharge_actutator_stdDevHigh)
+      # self.precharge_actuate_last = precharge_actuate
+
+      can_sends.append(fordcan.create_acc_msg(self.packer, self.CAN, CC.longActive, gas, brake, stopping, brake_actuate, precharge_actuate, v_ego_kph=targetSpeed * CV.MS_TO_KPH))
 
     ### ui ###
     send_ui = (self.main_on_last != main_on) or (self.lkas_enabled_last != CC.latActive) or (self.steer_alert_last != steer_alert)
