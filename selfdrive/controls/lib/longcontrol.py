@@ -1,4 +1,6 @@
-from cereal import car
+import numpy as np
+
+from cereal import car, log
 from openpilot.common.numpy_fast import clip, interp
 from openpilot.common.realtime import DT_CTRL
 from openpilot.selfdrive.controls.lib.drive_helpers import CONTROL_N, apply_deadzone
@@ -59,6 +61,19 @@ class LongControl:
                              k_f=CP.longitudinalTuning.kf, rate=1 / DT_CTRL)
     self.v_pid = 0.0
     self.last_output_accel = 0.0
+    self.gas_params = np.zeros((2, 4))  # TODO: read from offline data
+
+  def update_live_gas_params(self, gp: log.LiveGasParametersData):
+    self.gas_params = np.array([gp.gasFactor, gp.brakeFactor])
+
+  def get_gas_brake(self, features):
+    arr = np.array([*features, 1.])
+    gas, brake = np.dot(self.gas_params, arr)
+    if gas > self.CP.gasCommandOffset:
+      brake = 0
+    else:
+      gas = self.CP.gasCommandOffset
+    return float(gas), float(brake)
 
   def reset(self, v_pid):
     """Reset PID controller and change setpoint"""

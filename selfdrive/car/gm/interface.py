@@ -99,6 +99,7 @@ class CarInterface(CarInterfaceBase):
       ret.stoppingDecelRate = 2.0  # reach brake quickly after enabling
       ret.vEgoStopping = 0.25
       ret.vEgoStarting = 0.25
+      ret.gasCommandOffset = 1554
 
       if experimental_long:
         ret.pcmCruise = False
@@ -113,6 +114,7 @@ class CarInterface(CarInterfaceBase):
       # supports stop and go, but initial engage must (conservatively) be above 18mph
       ret.minEnableSpeed = 18 * CV.MPH_TO_MS
       ret.minSteerSpeed = 7 * CV.MPH_TO_MS
+      ret.gasCommandOffset = 1404
 
       # Tuning
       ret.longitudinalTuning.kpV = [2.4, 1.5]
@@ -148,6 +150,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kiV = [0.]
       ret.lateralTuning.pid.kf = 1.  # get_steer_feedforward_volt()
       ret.steerActuatorDelay = 0.2
+      CarInterfaceBase.configure_gas_tune(candidate, ret.longitudinalTuning, 'gas')
 
     elif candidate == CAR.MALIBU:
       ret.mass = 1496.
@@ -177,6 +180,7 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 15.8
       ret.centerToFront = ret.wheelbase * 0.4  # wild guess
       CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+      CarInterfaceBase.configure_gas_tune(candidate, ret.longitudinalTuning, 'gas')
 
     elif candidate == CAR.BUICK_REGAL:
       ret.mass = 3779. * CV.LB_TO_KG  # (3849+3708)/2
@@ -222,6 +226,7 @@ class CarInterface(CarInterfaceBase):
       ret.tireStiffnessFactor = 1.0
       ret.steerActuatorDelay = 0.2
       CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+      CarInterfaceBase.configure_gas_tune(candidate, ret.longitudinalTuning, 'gas')
 
     elif candidate == CAR.SILVERADO:
       ret.mass = 2450.
@@ -235,6 +240,7 @@ class CarInterface(CarInterfaceBase):
       if ret.openpilotLongitudinalControl:
         ret.minEnableSpeed = -1.
       CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+      CarInterfaceBase.configure_gas_tune(candidate, ret.longitudinalTuning, 'gas')
 
     elif candidate == CAR.EQUINOX:
       ret.mass = 3500. * CV.LB_TO_KG
